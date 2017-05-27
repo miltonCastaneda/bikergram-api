@@ -1,0 +1,25 @@
+{
+  "name": "bikergram-api",
+  "version": "1.0.0",
+  "description": "Bikergram REST API",
+  "scripts": {
+    "lint": "standard",
+    "test": "npm run lint && ava"
+  },
+  "standard": {
+    "parser": "babel-eslint"
+  },
+  "author": "Milton Castañeda",
+  "license": "MIT",
+  "devDependencies": {
+    "ava": "^0.19.1",
+    "babel-eslint": "^7.2.3",
+    "standard": "^10.0.2"
+  },
+  "dependencies": {
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1",
+    "test-listen": "^1.0.2",
+    "uuid-base62": "^0.1.0"
+  }
+}
