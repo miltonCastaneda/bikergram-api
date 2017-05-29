@@ -2,7 +2,6 @@
 
 import test from 'ava'
 import micro from 'micro'
-import uuid from 'uuid-base62'
 /**
  * permite hacer testing en microservicios con micro
  */
@@ -13,10 +12,14 @@ import listen from 'test-listen'
  * solo que implementa promises
  */
 import request from 'request-promise'
+import fixtures from './fixtures/'
 import pictures from '../pictures'
 
 test('Get /:id', async t => {
-  let id = uuid.v4()
+  /**
+   * Obtenemos un objeto de imagen
+   */
+  let image = fixtures.getImage()
 
   /**
    * en vez de crear la funcion asincrona le pasamos lo que
@@ -36,11 +39,10 @@ test('Get /:id', async t => {
    * la url y concatenamos el id,
    * json: true, para verificar la respuesta retorne los datos
    * en json
-   *
    */
-  let body = await request({ uri: `${url}/${id}`, json: true })
+  let body = await request({ uri: `${url}/${image.publicId}`, json: true })
   /** validacion del cuerpo sea igual a id */
-  t.deepEqual(body, { id })
+  t.deepEqual(body, image)
 })
 
 /**
