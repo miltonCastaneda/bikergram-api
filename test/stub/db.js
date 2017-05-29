@@ -23,4 +23,8 @@ export default class Db {
   getImage (id) {
     return Promise.resolve(fixtures.getImage())
   }
+
+  saveImage (image) {
+    return Promise.resolve(fixtures.getImage())
+  }
 }

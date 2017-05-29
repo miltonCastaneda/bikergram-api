@@ -1,6 +1,6 @@
 'use strict'
 
-import { send } from 'micro'
+import { send, json } from 'micro'
 import HttpHash from 'http-hash'
 import Db from 'bikergram-db'
 import config from './config'
@@ -11,7 +11,6 @@ let db = new Db(config.db)
 
 if (env === 'test') {
   db = new DbStub()
-  console.log('ambiente', env)
 }
 
 /**
@@ -44,6 +43,13 @@ hash.set('GET /:id', async function getPicture (req, res, params) {
   send(res, 200, image)
 })
 
+hash.set('POST /', async function postPicture (req, res, params) {
+  let image = await json(req)
+  await db.connect()
+  let created = await db.saveImage(image)
+  await db.disconnect()
+  send(res, 201, created)
+})
 /**
  * exportar por default la funcion main
  * en la cual contiene la logica de cuando

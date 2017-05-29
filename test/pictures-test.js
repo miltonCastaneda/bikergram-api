@@ -15,38 +15,46 @@ import request from 'request-promise'
 import fixtures from './fixtures/'
 import pictures from '../pictures'
 
-test('Get /:id', async t => {
-  /**
-   * Obtenemos un objeto de imagen
-   */
-  let image = fixtures.getImage()
-
-  /**
-   * en vez de crear la funcion asincrona le pasamos lo que
-   * exporta micro en pictures mediante send
-   */
-
+test.beforeEach(async t => {
   let srv = micro(pictures)
+  t.context.url = await listen(srv)
+})
 
-  /**
-   * listen corre el servidor y retorna la url
-   * en que el servidor esta correndo
-   */
-
-  let url = await listen(srv)
-  /**
-   * resolver la promesa del request le pasaomos
-   * la url y concatenamos el id,
-   * json: true, para verificar la respuesta retorne los datos
-   * en json
-   */
+test('Get /:id', async t => {
+  let image = fixtures.getImage()
+  let url = t.context.url
   let body = await request({ uri: `${url}/${image.publicId}`, json: true })
-  /** validacion del cuerpo sea igual a id */
   t.deepEqual(body, image)
 })
 
 /**
- * Definir test sin necesidad de usar el test aun
+ * Guardar imagen
  */
-test.todo('POST /')
+test('POST /', async t => {
+  let image = fixtures.getImage()
+  let url = t.context.url
+
+  /**
+   * resolveWithfullResponse: true
+   * resover la respuesta completa y retornar un response en vez
+   * de solo el body
+   */
+  let options = {
+    method: 'POST',
+    uri: url,
+    json: true,
+    body: {
+      description: image.description,
+      src: image.src,
+      userId: image.userId
+    },
+    resolveWithFullResponse: true
+  }
+
+  let response = await request(options)
+
+  t.is(response.statusCode, 201)
+  t.deepEqual(response.body, image)
+})
+
 test.todo('POST /:id/like')
