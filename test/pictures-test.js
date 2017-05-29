@@ -1,7 +1,7 @@
 'use strict'
 
 import test from 'ava'
-import micro, { send } from 'micro'
+import micro from 'micro'
 import uuid from 'uuid-base62'
 /**
  * permite hacer testing en microservicios con micro
@@ -13,24 +13,17 @@ import listen from 'test-listen'
  * solo que implementa promises
  */
 import request from 'request-promise'
+import pictures from '../pictures'
 
 test('Get /:id', async t => {
   let id = uuid.v4()
 
   /**
-   * Se crea el microservicio aqui solo para
-   * modo de prueba, es decir solo para el paso
-   *  del test,le paso un  request listener
-   * del modulo http,
-   * puede ser asincrono
-   * recibimos el request y response
-   * enviamos la respuesta con send(res,200,{id})
-   * por metodo get
+   * en vez de crear la funcion asincrona le pasamos lo que
+   * exporta micro en pictures mediante send
    */
 
-  let srv = micro(async (req, res) => {
-    send(res, 200, { id })
-  })
+  let srv = micro(pictures)
 
   /**
    * listen corre el servidor y retorna la url
@@ -40,9 +33,12 @@ test('Get /:id', async t => {
   let url = await listen(srv)
   /**
    * resolver la promesa del request le pasaomos
-   * la url y retorne los datos en json
+   * la url y concatenamos el id,
+   * json: true, para verificar la respuesta retorne los datos
+   * en json
+   *
    */
-  let body = await request({ uri: url, json: true })
+  let body = await request({ uri: `${url}/${id}`, json: true })
   /** validacion del cuerpo sea igual a id */
   t.deepEqual(body, { id })
 })
