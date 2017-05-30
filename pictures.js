@@ -50,6 +50,15 @@ hash.set('POST /', async function postPicture (req, res, params) {
   await db.disconnect()
   send(res, 201, created)
 })
+
+hash.set('POST /:id/like', async function likePicture (req, res, params) {
+  let id = params.id
+  await db.connect()
+  let image = await db.likeImag(id)
+  await db.disconnect()
+  send(res, 200, image)
+})
+
 /**
  * exportar por default la funcion main
  * en la cual contiene la logica de cuando
