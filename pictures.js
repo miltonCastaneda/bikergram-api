@@ -18,6 +18,12 @@ if (env === 'test') {
  */
 const hash = HttpHash()
 
+hash.set('GET /list', async function list (req, res, params) {
+  await db.connect()
+  let images = await db.getImages()
+  await db.disconnect()
+  send(res, 200, images)
+})
 /**
  * Activar rutas en get
  * /:id capturar parametro en url id
