@@ -26,5 +26,16 @@ export default {
       this.getImage(),
       this.getImage()
     ]
+  },
+
+  getUser () {
+    return {
+      id: '8794cac8-1cc2-4012-9995-c81e0bf944da',
+      name: 'Milton Castañeda',
+      username: 'Milton',
+      email: 'm@bikergram.test',
+      password: 'bikergram',
+      createdAt: new Date().toString()
+    }
   }
 }
