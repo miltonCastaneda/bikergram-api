@@ -30,6 +30,17 @@ hash.set('POST /', async function saveUser (req, res, params) {
   send(res, 201, created)
 })
 
+hash.set('GET /:username', async function getUser (req, res, params) {
+  let username = params.username
+  await db.connect()
+  let user = await db.getUser(username)
+  await db.disconnect()
+  delete user.email
+  delete user.password
+
+  send(res, 200, user)
+})
+
 /**
  * exportar por default la funcion main
  * en la cual contiene la logica de cuando
